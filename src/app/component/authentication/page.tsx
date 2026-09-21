@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "../Header";
-import Footer from "../Footer";
+import Footer from "../footer";
 import { SignIn } from "@clerk/nextjs";
 
 export default function AuthenticationPage() {
