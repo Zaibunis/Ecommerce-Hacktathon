@@ -1,6 +1,4 @@
 import React from 'react';
-import { Input } from "@/components/ui/input";
-import Image from 'next/image';
 import {
   Carousel,
   CarouselContent,
@@ -172,38 +170,6 @@ const Review = () => {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-         {/* Newsletter Signup */}
-         <div className="w-full bg-black rounded-lg py-8 px-6 md:px-12 flex flex-col md:flex-row justify-between items-center">
-          {/* Text Section */}
-          <div className="text-left text-white mb-4 md:mb-0">
-            <span className="text-3xl font-extrabold block mb-4">
-              STAY UP TO DATE ABOUT <br /> OUR LATEST OFFERS
-            </span>
-          </div>
-
-          {/* Right Section */}
-          <div className="flex flex-col items-end space-y-4 w-full md:w-auto">
-            {/* Email Input Section */}
-            <div className="relative w-full md:w-[349px]">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <Image src="/Frame (8).png" width={24} height={24} alt="Newsletter Icon" />
-              </div>
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                className="w-full h-[48px] pl-12 rounded-lg border-none"
-              />
-            </div>
-
-            {/* Box Section */}
-            <div className="relative w-full md:w-[349px] h-[48px] bg-white rounded-lg flex items-center pl-3">
-              <span className="ml-12 text-black font-medium">
-                Subscribe to Newsletter
-              </span>
             </div>
           </div>
         </div>

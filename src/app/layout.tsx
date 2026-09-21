@@ -1,13 +1,12 @@
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
-import './globals.css'
+import type { Metadata } from "next";
+import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
-
+export const metadata: Metadata = {
+  title: "SHOP.CO — Fashion that fits your style",
+  description:
+    "Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality.",
+};
 
 export default function RootLayout({
   children,
@@ -18,8 +17,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-        
-          <main>{children}</main>
+          {children}
         </body>
       </html>
     </ClerkProvider>

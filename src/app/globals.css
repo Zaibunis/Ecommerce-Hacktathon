@@ -4,16 +4,10 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --font-integral: 'Integral CF', 'Archivo Black', 'Arial Black', ui-sans-serif, system-ui, sans-serif;
+  --font-satoshi: 'Satoshi', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer utilities {
@@ -21,10 +15,13 @@
     text-wrap: balance;
   }
 
+  .font-integral {
+    font-family: var(--font-integral);
+  }
 
-.font-integral {
-  font-family: var(--font-integral);
-}
+  .font-satoshi {
+    font-family: var(--font-satoshi);
+  }
 }
 
 @layer base {
@@ -89,5 +86,31 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-satoshi);
+  }
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75) rotate(12deg);
+  }
+}
+
+@layer components {
+  .container-shop {
+    @apply mx-auto w-full max-w-[1300px] px-4 sm:px-6 lg:px-10;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-black text-white transition-colors hover:bg-black/80 disabled:opacity-50;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-full border border-black/10 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50;
   }
 }

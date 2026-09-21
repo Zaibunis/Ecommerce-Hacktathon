@@ -1,15 +1,54 @@
-interface IParams {
-    searchParams: {
-        amount: number
-    }
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import Header from "../component/Header";
+import Footer from "../component/Footer";
+import { clearCart } from "@/lib/cart";
+
+function SuccessContent() {
+  const searchParams = useSearchParams();
+  const amount = searchParams.get("amount");
+
+  useEffect(() => {
+    // Order is complete — clear the cart once
+    clearCart();
+  }, []);
+
+  return (
+    <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
+      <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
+        <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Payment Successful!</h1>
+      <p className="text-gray-600 mb-8">
+        Thank you for your purchase{amount ? ` of $${amount}` : ""}. Your order is on its way.
+      </p>
+      <div className="flex gap-4">
+        <Link href="/" className="btn-primary h-[52px] px-8 font-medium">
+          Back to Home
+        </Link>
+        <Link href="/comp/casual" className="btn-outline h-[52px] px-8 font-medium">
+          Continue Shopping
+        </Link>
+      </div>
+      <Image src="/SHOP.CO.png" alt="Shop.co" width={120} height={20} className="mt-12 opacity-40" />
+    </div>
+  );
 }
 
-const PaymentSuccess = ({ searchParams }: IParams) => {
-    return (
-        <div className="text-center w-full">
-            <h1 className="text-6xl">Thank you for purchasing $ {searchParams.amount}</h1>
-        </div>
-    )
+export default function PaymentSuccess() {
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<div className="min-h-[60vh]" />}>
+        <SuccessContent />
+      </Suspense>
+      <Footer />
+    </div>
+  );
 }
-
-export default PaymentSuccess
