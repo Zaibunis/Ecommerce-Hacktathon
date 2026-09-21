@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Footer = () => {
+export default function Footer() {
   return (
     <footer className="text-gray-600 body-font bg-[#F0F0F0]">
       <div className="container border-b border-black/10 px-5 py-12 mx-auto flex md:items-start md:flex-row md:flex-nowrap flex-wrap flex-col gap-10">
@@ -69,4 +69,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+
