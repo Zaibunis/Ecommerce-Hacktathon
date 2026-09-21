@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/app/component/Header";
-import Footer from "@/app/component/Footer";
+import Footer from "../component/Footer";
 import Newsletter from "@/app/component/Newsletter";
 import { addToCart } from "@/lib/cart";
 

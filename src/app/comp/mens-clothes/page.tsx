@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "@/app/component/Header";
-import Footer from "@/app/component/Footer";
+import Footer from "../../component/Footer";
 import Newsletter from "@/app/component/Newsletter";
 import { client } from "@/sanity/lib/client";
 import ProductCard from "@/app/component/ProductCard";
