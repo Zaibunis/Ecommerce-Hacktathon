@@ -3,24 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaStar, FaHeart, FaExchangeAlt } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { addToCart } from "@/lib/cart";
-
-export type CardProduct = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  category?: string;
-  discountPercent?: number;
-};
+import WishlistButton from "./WishlistButton";
+import type { Product } from "@/lib/types";
 
 export default function ProductCard({
   product,
   detailHref,
 }: {
-  product: CardProduct;
+  product: Product;
   detailHref: string;
 }) {
   const [added, setAdded] = useState(false);
@@ -45,47 +37,57 @@ export default function ProductCard({
     <div className="group">
       <Link
         href={detailHref}
-        className="block relative h-[300px] w-full overflow-hidden rounded-xl bg-gray-100"
+        className="block relative h-[280px] md:h-[310px] w-full overflow-hidden rounded-2xl bg-[#F0F0F0]"
       >
         <Image
           alt={product.name}
-          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+          className="object-cover w-full h-full group-hover:scale-[1.04] transition-transform duration-500 ease-out"
           src={product.imageUrl}
           width={285}
           height={301}
         />
 
-        {/* Hover overlay: click anywhere on it (except buttons) opens the detail page */}
-        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 p-5 text-center">
-          <h3 className="text-white font-bold text-lg">{product.name}</h3>
-          <p className="text-white/80 text-sm line-clamp-2">{product.description}</p>
-          <span className="text-white font-semibold">View Details →</span>
-          <button
-            onClick={handleAdd}
-            className="btn-primary px-6 h-[40px] text-sm font-medium mt-1"
-          >
-            {added ? "✓ Added to Cart" : "Add to Cart"}
-          </button>
-        </div>
-      </Link>
+        {/* Wishlist heart */}
+        <WishlistButton product={product} />
 
-      <div className="pt-3">
-        <h3 className="font-bold text-base leading-snug">{product.name}</h3>
-        <p className="text-black/50 text-xs mb-1">{product.category}</p>
-        <div className="flex items-center gap-1 mb-1">
-          {[...Array(5)].map((_, i) => (
-            <FaStar key={i} className="h-3.5 w-3.5 text-yellow-500" />
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <p className="font-bold">${product.price}</p>
-          {originalPrice && (
-            <p className="text-black/40 line-through text-sm">${originalPrice}</p>
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {product.isNew && (
+            <span className="bg-white/95 backdrop-blur text-black text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
+              NEW
+            </span>
           )}
-          {product.discountPercent && (
-            <span className="text-[10px] font-bold text-white bg-[#FF3333] rounded-full px-2 py-0.5">
+          {(product.discountPercent ?? 0) >= 30 && (
+            <span className="bg-[#FF3333] text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
               -{product.discountPercent}%
             </span>
+          )}
+        </div>
+
+        {/* Hover quick-add */}
+        <button
+          onClick={handleAdd}
+          className="absolute inset-x-3 bottom-3 h-[40px] rounded-full bg-black/85 backdrop-blur text-white text-sm font-semibold opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-black"
+        >
+          {added ? "✓ Added to Cart" : "+ Add to Cart"}
+        </button>
+      </Link>
+
+      <div className="pt-3.5">
+        <h3 className="font-bold text-base leading-snug truncate">{product.name}</h3>
+        <p className="text-black/50 text-xs mb-1.5 capitalize">{product.category}</p>
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <span className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <FaStar key={i} className="h-3 w-3 text-yellow-500" />
+            ))}
+          </span>
+          <span className="text-xs text-black/40">4.8</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <p className="font-bold text-lg">${product.price}</p>
+          {originalPrice && (
+            <p className="text-black/40 line-through text-sm">${originalPrice}</p>
           )}
         </div>
       </div>

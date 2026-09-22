@@ -3,6 +3,10 @@
 import { useCart } from "@/lib/useCart";
 import { getTotals } from "@/lib/cart";
 import { useState } from "react";
+import Link from "next/link";
+import Header from "@/app/component/Header";
+import Footer from "@/app/component/Footer";
+import Newsletter from "@/app/component/Newsletter";
 
 export default function CartPage() {
   const { items, mounted, setQuantity, remove } = useCart();
@@ -24,16 +28,27 @@ export default function CartPage() {
   };
 
   return (
-    <div className="container-shop py-10">
+    <div>
+      <Header />
+
+      <div className="container-shop mt-5">
+        <nav className="text-sm text-gray-500">
+          <Link href="/" className="hover:underline">Home</Link>
+          <span className="mx-2">/</span>
+          <span className="text-black font-medium">Cart</span>
+        </nav>
+      </div>
+
+      <div className="container-shop py-10">
       <h1 className="text-3xl font-extrabold mb-8">YOUR CART</h1>
 
       {items.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-xl font-semibold mb-2">Your cart is empty</p>
           <p className="text-gray-500 mb-6">Add some products to get started!</p>
-          <a href="/" className="btn-primary h-[52px] px-8">
+          <Link href="/comp/casual" className="btn-primary h-[52px] px-8">
             Continue Shopping
-          </a>
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -42,15 +57,15 @@ export default function CartPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between border border-black/10 rounded-2xl p-4 bg-white"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-black/10 rounded-2xl p-4 bg-white"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 min-w-0">
                   {item.image && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-20 h-20 object-cover rounded-xl bg-gray-100"
+                      className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl bg-gray-100 shrink-0"
                     />
                   )}
                   <div>
@@ -61,7 +76,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-3">
+                <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3">
                   <button
                     onClick={() => remove(item.id)}
                     aria-label="Remove item"
@@ -127,16 +142,20 @@ export default function CartPage() {
               <button onClick={applyPromo} className="btn-primary w-full h-[48px] text-sm font-medium">
                 Apply
               </button>
-              <a
+              <Link
                 href="/component/checkout"
                 className="btn-primary w-full h-[48px] text-sm font-medium gap-2"
               >
                 Go to Checkout →
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       )}
+      </div>
+
+      <Newsletter />
+      <Footer />
     </div>
   );
 }

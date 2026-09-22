@@ -4,20 +4,25 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/app/component/Header";
-import Footer from "../component/Footer";
+import Footer from "@/app/component/Footer";
 import Newsletter from "@/app/component/Newsletter";
 import { addToCart } from "@/lib/cart";
+import WishlistButton from "./WishlistButton";
+import type { Product } from "@/lib/types";
 
-export type ProductData = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  category?: string;
-  discountPercent?: number;
-  colors?: string[];
-  sizes?: string[];
+const COLOR_MAP: Record<string, string> = {
+  black: "#000000",
+  white: "#FFFFFF",
+  red: "#EF4444",
+  green: "#22C55E",
+  blue: "#3B82F6",
+  darkblue: "#1E3A8A",
+  yellow: "#EAB308",
+  purple: "#A855F7",
+  pink: "#EC4899",
+  orange: "#F97316",
+  brown: "#78350F",
+  grey: "#9CA3AF",
 };
 
 export default function ProductDetail({
@@ -25,12 +30,14 @@ export default function ProductDetail({
   breadcrumb,
   backHref,
 }: {
-  product: ProductData;
+  product: Product;
   breadcrumb: string;
   backHref: string;
 }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(product.colors?.[0] ?? "");
+  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] ?? "");
 
   const originalPrice = product.discountPercent
     ? (product.price / (1 - product.discountPercent / 100)).toFixed(2)
@@ -43,8 +50,8 @@ export default function ProductDetail({
         name: product.name,
         price: product.price,
         image: product.imageUrl,
-        color: product.colors?.[0],
-        size: product.sizes?.[0],
+        color: selectedColor || undefined,
+        size: selectedSize || undefined,
       },
       quantity
     );
@@ -67,8 +74,8 @@ export default function ProductDetail({
         </nav>
       </div>
 
-      <div className="max-w-[1280px] min-h-[60vh] p-3 m-auto">
-        <div className="w-full flex md:flex-row flex-col md:py-12 gap-8">
+      <div className="container-shop min-h-[60vh] py-6 md:py-10">
+        <div className="w-full flex md:flex-row flex-col md:py-6 gap-8">
           {/* Image */}
           <div className="md:w-3/5 w-full">
             <div className="p-6 bg-[#F9F1E7] h-full flex items-center justify-center rounded-2xl">
@@ -78,6 +85,7 @@ export default function ProductDetail({
                 width={600}
                 height={600}
                 className="w-full h-full max-h-[520px] object-cover rounded-xl"
+                priority
               />
             </div>
           </div>
@@ -88,7 +96,7 @@ export default function ProductDetail({
 
             <div className="flex items-center gap-2 mb-4">
               <span className="text-yellow-500">★★★★★</span>
-              <span className="text-sm text-gray-500">(150 reviews)</span>
+              <span className="text-sm text-gray-500">4.8/5 · (150 reviews)</span>
             </div>
 
             <div className="flex items-center gap-3 mb-4">
@@ -107,13 +115,22 @@ export default function ProductDetail({
 
             {product.colors && product.colors.length > 0 && (
               <div className="mb-4">
-                <span className="text-sm font-medium text-gray-600 block mb-2">Select Colors</span>
+                <span className="text-sm font-medium text-gray-600 block mb-2">
+                  Select Color: <span className="capitalize font-bold text-black">{selectedColor}</span>
+                </span>
                 <div className="flex gap-3">
-                  {product.colors.map((color: string, i: number) => (
-                    <span
-                      key={i}
-                      className="w-8 h-8 rounded-full border border-black/10"
-                      style={{ backgroundColor: color }}
+                  {product.colors.map((color: string) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      aria-label={color}
+                      title={color}
+                      className={`w-9 h-9 rounded-full border transition-transform ${
+                        selectedColor === color
+                          ? "ring-2 ring-black ring-offset-2 scale-110"
+                          : "border-black/10 hover:scale-105"
+                      }`}
+                      style={{ backgroundColor: COLOR_MAP[color.toLowerCase()] || color }}
                     />
                   ))}
                 </div>
@@ -125,12 +142,17 @@ export default function ProductDetail({
                 <span className="text-sm font-medium text-gray-600 block mb-2">Choose Size</span>
                 <div className="flex gap-3 flex-wrap">
                   {product.sizes.map((size: string) => (
-                    <span
+                    <button
                       key={size}
-                      className="rounded-full text-sm px-6 h-[44px] flex items-center justify-center bg-gray-100 text-gray-600"
+                      onClick={() => setSelectedSize(size)}
+                      className={`rounded-full text-sm px-6 h-[44px] flex items-center justify-center transition-colors ${
+                        selectedSize === size
+                          ? "bg-black text-white font-medium"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
                     >
                       {size}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -138,22 +160,32 @@ export default function ProductDetail({
 
             {/* Quantity + Add to Cart */}
             <div className="flex flex-wrap items-center gap-4 mt-8">
-              <div className="flex items-center justify-between bg-[#F0F0F0] px-4 py-2 rounded-full w-[150px] h-[52px]">
-                <button className="text-lg font-semibold text-black" onClick={() => setQuantity(Math.max(1, quantity - 1))}>
+              <div className="flex items-center justify-between bg-[#F0F0F0] px-4 py-2 rounded-full w-[140px] h-[52px] shrink-0">
+                <button
+                  className="text-lg font-semibold text-black w-8"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Decrease quantity"
+                >
                   −
                 </button>
                 <span className="text-sm text-center text-black font-medium">{quantity}</span>
-                <button className="text-lg font-semibold text-black" onClick={() => setQuantity(quantity + 1)}>
+                <button
+                  className="text-lg font-semibold text-black w-8"
+                  onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Increase quantity"
+                >
                   +
                 </button>
               </div>
 
               <button
-                className="btn-primary px-8 h-[52px] w-full sm:w-[300px] text-sm font-medium"
+                className="btn-primary px-8 h-[52px] flex-1 sm:flex-none text-sm font-medium"
                 onClick={handleAddToCart}
               >
                 {added ? "✓ Added to Cart!" : "Add to Cart"}
               </button>
+
+              <WishlistButton product={product} variant="plain" />
             </div>
 
             {added && (
@@ -164,6 +196,22 @@ export default function ProductDetail({
                 View Cart →
               </Link>
             )}
+
+            {/* Trust row */}
+            <div className="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-black/10 text-center">
+              <div>
+                <p className="font-bold text-sm">Free Shipping</p>
+                <p className="text-xs text-gray-500">On orders over $100</p>
+              </div>
+              <div>
+                <p className="font-bold text-sm">Easy Returns</p>
+                <p className="text-xs text-gray-500">30-day return policy</p>
+              </div>
+              <div>
+                <p className="font-bold text-sm">Secure Payment</p>
+                <p className="text-xs text-gray-500">Stripe protected</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

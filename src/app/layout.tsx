@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import WelcomePromo from "./component/WelcomePromo";
 
 export const metadata: Metadata = {
   title: "SHOP.CO — Fashion that fits your style",
@@ -18,6 +19,7 @@ export default function RootLayout({
       <html lang="en">
         <body>
           {children}
+          <WelcomePromo />
         </body>
       </html>
     </ClerkProvider>

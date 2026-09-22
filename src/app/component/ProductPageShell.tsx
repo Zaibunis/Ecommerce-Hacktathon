@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import Header from "@/app/component/Header";
-import Footer from "../component/Footer";
+import Footer from "@/app/component/Footer";
 import ProductDetail from "@/app/component/ProductDetail";
-import { client } from "@/sanity/lib/client";
+import { useProducts, findProduct } from "@/lib/useProducts";
 
 export default function ProductPageShell({
   id,
@@ -16,35 +16,9 @@ export default function ProductPageShell({
   breadcrumb: string;
   backHref: string;
 }) {
-  const [product, setProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading, error } = useProducts();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const query = `*[_type=="products"]{
-          _id, name, description, price,
-          "imageUrl": image.asset->url,
-          category, discountPercent, "isNew": new, colors, sizes
-        }`;
-        const fetched = await client.fetch(query);
-        const found = fetched.find((item: { _id: string }) => item._id === id);
-
-        if (found) {
-          setProduct(found);
-        } else {
-          setError("Product not found");
-        }
-      } catch (err) {
-        setError("Failed to load product details");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
+  const product = useMemo(() => findProduct(products, id), [products, id]);
 
   if (loading) {
     return (
@@ -62,9 +36,10 @@ export default function ProductPageShell({
     return (
       <div>
         <Header />
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
           <p className="text-xl font-bold">{error || "Product not found"}</p>
-          <Link href={backHref} className="btn-primary h-[48px] px-6">
+          <p className="text-gray-500 text-sm">It may have been removed or the link is incorrect.</p>
+          <Link href={backHref} className="btn-primary h-[48px] px-8">
             Back to {breadcrumb}
           </Link>
         </div>

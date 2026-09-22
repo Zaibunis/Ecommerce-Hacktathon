@@ -1,14 +1,11 @@
-import { createClient } from "next-sanity";
-import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
+import { client } from "./client";
 
-
-const client = createClient({
-  projectId: "017bgzcc",
-  dataset: "production",
-  useCdn: true,
-  apiVersion: "v2025-01-07",
-});
-
-export async function sanityFetch({query, params ={}}:{query : string ,params?: any}){
-    return await client.fetch(query, params)
+export async function sanityFetch({
+  query,
+  params = {},
+}: {
+  query: string;
+  params?: Record<string, unknown>;
+}) {
+  return client.fetch(query, params);
 }

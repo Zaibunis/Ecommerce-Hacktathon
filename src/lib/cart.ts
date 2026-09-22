@@ -39,6 +39,12 @@ export function addToCart(
     cart.push({ ...item, quantity });
   }
   saveCart(cart);
+  // Persist to the database (guest cookie or signed-in user)
+  fetch("/api/cart", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...item, quantity }),
+  }).catch(() => {});
   return cart;
 }
 

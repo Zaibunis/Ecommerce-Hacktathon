@@ -7,6 +7,17 @@ import Footer from "../Footer";
 import Newsletter from "../Newsletter";
 import { useCart } from "@/lib/useCart";
 import { getTotals } from "@/lib/cart";
+import { useUser } from "@clerk/nextjs";
+
+const FALLBACK_PROFILE = {
+  name: "",
+  email: "",
+  address: "",
+  city: "",
+  state: "",
+  zip: "",
+  country: "",
+};
 
 const StripePayment = dynamic(() => import("../StripePayment/page"), { ssr: false });
 
@@ -19,16 +30,27 @@ type CartItem = {
 
 const Page: React.FC = () => {
   const { items: cart, mounted } = useCart();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-  });
+  const { isSignedIn } = useUser();
+  const [formData, setFormData] = useState(FALLBACK_PROFILE);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [savedNote, setSavedNote] = useState("");
+
+  // Prefill the form from the user's saved profile (server-side)
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.profile) {
+          setFormData((prev) => ({
+            ...prev,
+            name: data.profile.name || prev.name,
+            email: data.profile.email || prev.email,
+            address: data.profile.shippingAddress || prev.address,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (mounted && cart.length === 0) {
@@ -41,6 +63,32 @@ const Page: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // "Save my details" — stores the profile in Postgres for signed-in users
+  const handleSaveProfile = async () => {
+    if (!isSignedIn) {
+      setSavedNote("Sign in to save your details for next time.");
+      return;
+    }
+    if (!formData.name || !formData.email || !formData.address) {
+      setSavedNote("Fill in name, email and address first.");
+      return;
+    }
+    try {
+      const res = await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          shippingAddress: `${formData.address}, ${formData.city} ${formData.state} ${formData.zip}, ${formData.country}`,
+        }),
+      });
+      setSavedNote(res.ok ? "✓ Details saved for next time" : "Could not save details");
+    } catch {
+      setSavedNote("Could not save details");
+    }
   };
 
   const cartTotal = totals.total;
@@ -167,6 +215,17 @@ const Page: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="flex items-center justify-between mt-4">
+            <button
+              type="button"
+              onClick={handleSaveProfile}
+              className="text-sm font-medium underline underline-offset-4 hover:no-underline"
+            >
+              Save my details
+            </button>
+            {savedNote && <span className="text-xs text-gray-500">{savedNote}</span>}
           </div>
 
           <div className="mt-6">

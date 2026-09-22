@@ -1,12 +1,17 @@
-import { createClient } from 'next-sanity'
+import { createClient } from "next-sanity";
 
-import { apiVersion, dataset, projectId } from '../env'
-
+/**
+ * Public Sanity client.
+ *
+ * IMPORTANT: Do NOT put a token here — this module is imported by client
+ * components, so anything in it ends up in the browser bundle.
+ *
+ * The project dataset is public (readable via the API CDN without a token),
+ * so no token is required to read products.
+ */
 export const client = createClient({
-  projectId:"017bgzcc",
-  dataset:"production",
-  apiVersion:"v2025-01-07",
-  useCdn: false,
-  token:"skR291TJMmpTOtPT0dLebvzc3nGRjEEaPSFXacmMjQiJcDIqrMZEm9bWrUg1OSVxSqt3LvlU2t80eu3OquX3bMSoC50FD8iBZi75XGXJDBflcrxFZnoRFEWiaFFYesJ7CWaPU4E5ufjESJve759zfCzQHROX5xpMkOipczNCvg2tgaYyMB7l"
-
-})
+  projectId: "017bgzcc",
+  dataset: "production",
+  apiVersion: "2025-01-07",
+  useCdn: true,
+});

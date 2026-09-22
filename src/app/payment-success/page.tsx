@@ -6,15 +6,31 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import Header from "../component/Header";
 import Footer from "../component/Footer";
-import { clearCart } from "@/lib/cart";
+import { clearCart, getCart, getTotals } from "@/lib/cart";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const amount = searchParams.get("amount");
 
   useEffect(() => {
-    // Order is complete — clear the cart once
-    clearCart();
+    // Order is complete — record it in the database, then clear the cart
+    const finalize = async () => {
+      try {
+        const items = getCart();
+        if (items.length > 0) {
+          await fetch("/api/profile", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items, total: getTotals(items).total }),
+          });
+        }
+      } catch {
+        // Never block the success page on order recording
+      }
+      await fetch("/api/cart", { method: "DELETE" }).catch(() => {});
+      clearCart();
+    };
+    finalize();
   }, []);
 
   return (

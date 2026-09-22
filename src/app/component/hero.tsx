@@ -89,7 +89,7 @@ export default function Hero() {
               width={540}
               height={620}
               priority
-              className="rounded-xl object-cover max-h-[520px] w-auto"
+              className="rounded-xl object-cover max-h-[380px] sm:max-h-[460px] lg:max-h-[520px] w-auto max-w-full"
             />
             <Sparkle className="w-12 h-12 md:w-16 md:h-16 -top-2 -left-4" delay={0.2} />
             <Starburst className="w-10 h-10 md:w-14 md:h-14 bottom-16 right-4" delay={1} />

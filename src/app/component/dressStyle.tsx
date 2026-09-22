@@ -49,10 +49,13 @@ const DressStyle = () => {
   );
 };
 
+// NOTE: the style images already include their label text (Casual, Formal...),
+// so no overlay title is rendered here — only a subtle hover CTA.
 function StyleCard({ title, url, href }: { title: string; url: string; href: string }) {
   return (
     <Link
       href={href}
+      aria-label={`Shop ${title} style`}
       className="group relative block rounded-[20px] overflow-hidden bg-white h-[190px] md:h-[289px]"
     >
       <Image
@@ -62,11 +65,8 @@ function StyleCard({ title, url, href }: { title: string; url: string; href: str
         height={289}
         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-      <h3 className="absolute top-5 left-6 text-2xl md:text-3xl font-bold text-black drop-shadow-sm">
-        {title}
-      </h3>
-      <span className="absolute bottom-5 right-6 text-sm font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+      <span className="absolute bottom-5 right-6 text-sm font-semibold text-black bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-sm opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
         Shop now →
       </span>
     </Link>
