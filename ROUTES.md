@@ -4,18 +4,19 @@
 
 | Route | File | Description |
 |---|---|---|
-| `/` | `src/app/page.tsx` | Homepage: hero, brands, New Arrivals + Top Selling grids, dress styles, reviews, chatbot, newsletter |
-| `/search?q=` | `src/app/search/page.tsx` | Product search across name/description/category |
-| `/comp/casual` | `src/app/comp/casual/page.tsx` | Casual listing with professional filter panel (price/color/size) + sort |
-| `/comp/mens-clothes` | `src/app/comp/mens-clothes/page.tsx` | Shirts/jeans/shorts listing + sort |
-| `/comp/cart` | `src/app/comp/cart/page.tsx` | Cart page with promo code and order summary |
-| `/comp/wishlist` | `src/app/comp/wishlist/page.tsx` | Saved products, move-all-to-cart |
-| `/component/checkout` | `src/app/component/checkout/page.tsx` | Billing details (prefilled from profile) + Stripe payment |
+| `/` | `src/app/page.tsx` | Homepage: hero, brands marquee, New Arrivals + Top Selling sections, dress styles, reviews, chatbot, newsletter |
+| `/shop/casual` | `src/app/shop/casual/page.tsx` | Casual listing with professional filter panel (price/color/size) + sort |
+| `/shop/mens-clothes` | `src/app/shop/mens-clothes/page.tsx` | Shirts/jeans/shorts listing + sort |
+| `/product/[id]` | `src/app/product/[id]/page.tsx` | Unified product detail: gallery, color/size pickers, quantity, wishlist, tabs, related products |
+| `/cart` | `src/app/cart/page.tsx` | Cart page with promo code and order summary |
+| `/wishlist` | `src/app/wishlist/page.tsx` | Saved products, move-all-to-cart |
+| `/checkout` | `src/app/checkout/page.tsx` | Billing details (prefilled from profile) + Stripe payment |
 | `/payment-success` | `src/app/payment-success/page.tsx` | Records the order, clears cart |
-| `/productOne/[id]` … `/productFour/[id]` | `src/app/product*/[id]/page.tsx` | Product detail pages (all share `ProductDetail`) |
-| `/productOne` … `/productFour` | `src/app/product*/page.tsx` | Home grid sections (New Arrivals, Top Selling, Casual, Formal) |
-| `/component/authentication` | `src/app/component/authentication/page.tsx` | Clerk sign-in/sign-up page |
+| `/search?q=` | `src/app/search/page.tsx` | Product search across name/description/category |
+| `/sign-in` | `src/app/sign-in/page.tsx` | Clerk sign-in/sign-up page |
 | `/studio/[[...tool]]` | `src/app/studio/` | Embedded Sanity Studio (CMS admin) |
+
+> Home grid sections (New Arrivals / Top Selling) are components (`src/components/shop/ProductSection.tsx`), not routes.
 
 ## API Routes
 
@@ -27,6 +28,10 @@
 | `/api/profile` | GET / POST / PUT | Get profile, save profile, record completed order |
 | `/api/chat` | GET `?q=` | Shopping-assistant answers from the live catalog |
 | `/api/payment-intent` | POST | Creates a Stripe PaymentIntent from the real cart total |
+
+## Auth & Middleware
+
+`src/middleware.ts` protects `/shop/*`, `/cart`, `/wishlist`, `/checkout` and `/product/*` — unauthenticated visitors are redirected to Clerk sign-in.
 
 ## Shared Components (`src/app/component/`)
 
@@ -41,8 +46,7 @@
 | `review.tsx` | Reviews carousel with working arrows (embla) |
 | `ProductCard.tsx` | Card with badges, wishlist heart, hover quick-add |
 | `ProductCardSkeleton.tsx` | Loading skeletons |
-| `ProductDetail.tsx` | Shared detail layout: color/size pickers, quantity, wishlist, trust row |
-| `ProductPageShell.tsx` | Data shell for the four `[id]` detail routes |
+| `ProductDetail.tsx` | Shared detail layout used by other surfaces |
 | `WishlistButton.tsx` | Heart toggle (overlay + plain variants) |
 | `SortSelect.tsx` | Styled sort dropdown |
 | `Chatbot.tsx` | On-theme shopping assistant (catalog-aware) |

@@ -3,10 +3,10 @@ import Link from "next/link";
 import * as motion from "framer-motion/client";
 
 const styles = [
-  { title: "Casual", url: "/Frame 61.png", href: "/comp/casual" },
-  { title: "Formal", url: "/Frame 62.png", href: "/comp/mens-clothes" },
-  { title: "Party", url: "/Frame 64.png", href: "/comp/casual" },
-  { title: "Gym", url: "/Frame 63.png", href: "/comp/mens-clothes" },
+  { title: "Casual", url: "/Frame 61.png", href: "/shop/casual" },
+  { title: "Formal", url: "/Frame 62.png", href: "/shop/mens-clothes" },
+  { title: "Party", url: "/Frame 64.png", href: "/shop/casual" },
+  { title: "Gym", url: "/Frame 63.png", href: "/shop/mens-clothes" },
 ];
 
 const DressStyle = () => {

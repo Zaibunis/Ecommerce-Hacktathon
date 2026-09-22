@@ -54,7 +54,7 @@ export default function Hero() {
 
           <div className="flex justify-center lg:justify-start mt-6">
             <Link
-              href="/comp/casual"
+              href="/shop/casual"
               className="btn-primary w-full sm:w-[210px] h-[52px] lg:h-[56px] text-base font-medium"
             >
               Shop Now

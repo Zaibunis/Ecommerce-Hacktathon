@@ -39,7 +39,7 @@ export default function WishlistPage() {
             </div>
             <p className="text-xl font-semibold mb-2">Your wishlist is empty</p>
             <p className="text-gray-500 mb-6">Tap the heart on any product to save it here.</p>
-            <Link href="/comp/casual" className="btn-primary h-[52px] px-8">
+            <Link href="/shop/casual" className="btn-primary h-[52px] px-8">
               Browse Products
             </Link>
           </div>

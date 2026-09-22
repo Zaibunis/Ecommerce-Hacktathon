@@ -73,6 +73,8 @@ The schema is created lazily by `ensureSchema()` (`src/lib/db.ts`) — no migrat
 
 ## Routing Map
 
+Professional flat routes: `/shop/casual`, `/shop/mens-clothes`, `/product/[id]`, `/cart`, `/wishlist`, `/checkout`, `/sign-in`.
+
 See [ROUTES.md](./ROUTES.md) for the complete page + API route reference.
 
 ## Features

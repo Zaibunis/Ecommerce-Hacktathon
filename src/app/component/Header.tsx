@@ -18,9 +18,9 @@ import { useCart } from "@/lib/useCart";
 import { useWishlist } from "@/lib/useWishlist";
 
 const NAV_LINKS = [
-  { label: "On Sale", href: "/comp/casual" },
-  { label: "New Arrivals", href: "/comp/mens-clothes" },
-  { label: "Brands", href: "/comp/casual" },
+  { label: "On Sale", href: "/shop/casual" },
+  { label: "New Arrivals", href: "/shop/mens-clothes" },
+  { label: "Brands", href: "/shop/casual" },
 ];
 
 export default function Header() {
@@ -55,7 +55,7 @@ export default function Header() {
         <SignedOut>
           <span className="text-xs sm:text-sm text-center">
             Sign up and get 20% off your first order.
-            <Link href="/component/authentication" className="underline ml-2 whitespace-nowrap">
+            <Link href="/sign-in" className="underline ml-2 whitespace-nowrap">
               Sign Up Now
             </Link>
           </span>
@@ -85,10 +85,10 @@ export default function Header() {
                     <NavigationMenuTrigger className="bg-transparent px-0 hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent text-base">Shop</NavigationMenuTrigger>
                     <NavigationMenuContent className="w-[260px] py-3 px-5 bg-white shadow-lg rounded-lg">
                       <NavigationMenuLink className="text-base text-black/80 block py-2.5 hover:text-black hover:underline underline-offset-4">
-                        <Link href="/comp/casual">Casual</Link>
+                        <Link href="/shop/casual">Casual</Link>
                       </NavigationMenuLink>
                       <NavigationMenuLink className="text-base text-black/80 block py-2.5 hover:text-black hover:underline underline-offset-4">
-                        <Link href="/comp/mens-clothes">Mens-Clothes</Link>
+                        <Link href="/shop/mens-clothes">Mens-Clothes</Link>
                       </NavigationMenuLink>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
@@ -128,7 +128,7 @@ export default function Header() {
             </button>
           </form>
 
-          <Link href="/comp/wishlist" className="relative" aria-label="Wishlist">
+          <Link href="/wishlist" className="relative" aria-label="Wishlist">
             <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
             </svg>
@@ -139,7 +139,7 @@ export default function Header() {
             )}
           </Link>
 
-          <Link href="/comp/cart" className="relative" aria-label="Cart">
+          <Link href="/cart" className="relative" aria-label="Cart">
             <Image src="/Frame (3).png" alt="Cart" width={24} height={24} />
             {mounted && count > 0 && (
               <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -182,7 +182,7 @@ export default function Header() {
           </form>
           <ul>
             <li className="py-2">
-              <Link href="/comp/wishlist" className="block hover:underline" onClick={toggleMenu}>
+              <Link href="/wishlist" className="block hover:underline" onClick={toggleMenu}>
                 Wishlist
               </Link>
             </li>
@@ -193,12 +193,12 @@ export default function Header() {
               {isShopOpen && (
                 <ul className="pl-4">
                   <li className="py-2">
-                    <Link href="/comp/casual" className="block hover:underline" onClick={toggleMenu}>
+                    <Link href="/shop/casual" className="block hover:underline" onClick={toggleMenu}>
                       Casual
                     </Link>
                   </li>
                   <li className="py-2">
-                    <Link href="/comp/mens-clothes" className="block hover:underline" onClick={toggleMenu}>
+                    <Link href="/shop/mens-clothes" className="block hover:underline" onClick={toggleMenu}>
                       Mens-Clothes
                     </Link>
                   </li>

@@ -5,8 +5,7 @@ import DressStyle from "./component/dressStyle"
 import Review from "./component/review"
 import Footer from "./component/Footer"
 import Newsletter from "./component/Newsletter"
-import Main from "./productOne/page"
-import Main2 from "./productTwo/page"
+import ProductSection from "@/components/shop/ProductSection"
 import Chatbot from "./component/Chatbot"
 
 export default function Land() {
@@ -15,8 +14,8 @@ export default function Land() {
       <Home />
       <Hero />
       <Brands />
-      <Main />
-      <Main2 />
+      <ProductSection kind="new-arrivals" />
+      <ProductSection kind="top-selling" />
       <DressStyle />
       <Review />
       <Chatbot />

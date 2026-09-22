@@ -190,7 +190,7 @@ export default function ProductDetail({
 
             {added && (
               <Link
-                href="/comp/cart"
+                href="/cart"
                 className="inline-block mt-4 text-sm font-semibold underline hover:no-underline"
               >
                 View Cart →

@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Header from "../Header";
-import Footer from "../Footer";
-import Newsletter from "../Newsletter";
+import Header from "@/app/component/Header";
+import Footer from "@/app/component/Footer";
+import Newsletter from "@/app/component/Newsletter";
 import { useCart } from "@/lib/useCart";
 import { getTotals } from "@/lib/cart";
 import { useUser } from "@clerk/nextjs";
@@ -19,7 +19,7 @@ const FALLBACK_PROFILE = {
   country: "",
 };
 
-const StripePayment = dynamic(() => import("../StripePayment/page"), { ssr: false });
+const StripePayment = dynamic(() => import("@/app/component/StripePayment/page"), { ssr: false });
 
 type CartItem = {
   id: string;
@@ -130,7 +130,7 @@ const Page: React.FC = () => {
           {cart.length === 0 ? (
             <div>
               <p className="text-gray-600 mb-4">Your cart is empty.</p>
-              <a href="/comp/casual" className="btn-outline h-[44px] px-6 text-sm">
+              <a href="/shop/casual" className="btn-outline h-[44px] px-6 text-sm">
                 Browse Products
               </a>
             </div>

@@ -82,7 +82,7 @@ export default function WelcomePromo() {
             Apply 20% Off
           </button>
           <Link
-            href="/comp/casual"
+            href="/shop/casual"
             onClick={dismiss}
             className="btn-outline h-[40px] px-4 text-sm"
           >

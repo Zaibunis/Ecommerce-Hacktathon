@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Header from "@/app/component/Header";
-import Footer from "../../component/Footer";
+import Footer from "@/app/component/Footer";
 import Newsletter from "@/app/component/Newsletter";
 import ProductCard from "@/app/component/ProductCard";
 import { ProductCardSkeleton } from "@/app/component/ProductCardSkeleton";
@@ -301,7 +301,7 @@ export default function CasualPage() {
                   <ProductCard
                     key={product._id}
                     product={product}
-                    detailHref={`/productOne/${product._id}`}
+                    detailHref={`/product/${product._id}`}
                   />
                 ))}
               </div>

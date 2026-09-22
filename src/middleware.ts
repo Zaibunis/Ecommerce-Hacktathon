@@ -1,16 +1,14 @@
 
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-// Update the matcher to cover the /comp routes that require authentication
+// Routes that require authentication
 const isProtectedRoute = createRouteMatcher([
-  '/comp/mens-clothes(.*)',
-  '/comp/casual(.*)',
-  '/comp/cart(.*)',
-  '/productOne(.*)',
-   '/productTwo(.*)',
-    '/productThree(.*)',
-     '/productFour(.*)',
-      
+  '/shop/mens-clothes(.*)',
+  '/shop/casual(.*)',
+  '/cart(.*)',
+  '/wishlist(.*)',
+  '/checkout(.*)',
+  '/product(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

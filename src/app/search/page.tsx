@@ -44,7 +44,7 @@ function SearchResults() {
             <ProductCard
               key={product._id}
               product={product}
-              detailHref={`/productOne/${product._id}`}
+              detailHref={`/product/${product._id}`}
             />
           ))}
         </div>

@@ -46,7 +46,7 @@ export default function CartPage() {
         <div className="text-center py-20">
           <p className="text-xl font-semibold mb-2">Your cart is empty</p>
           <p className="text-gray-500 mb-6">Add some products to get started!</p>
-          <Link href="/comp/casual" className="btn-primary h-[52px] px-8">
+          <Link href="/shop/casual" className="btn-primary h-[52px] px-8">
             Continue Shopping
           </Link>
         </div>
@@ -143,7 +143,7 @@ export default function CartPage() {
                 Apply
               </button>
               <Link
-                href="/component/checkout"
+                href="/checkout"
                 className="btn-primary w-full h-[48px] text-sm font-medium gap-2"
               >
                 Go to Checkout →

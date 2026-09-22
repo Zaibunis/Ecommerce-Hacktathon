@@ -48,7 +48,7 @@ function SuccessContent() {
         <Link href="/" className="btn-primary h-[52px] px-8 font-medium">
           Back to Home
         </Link>
-        <Link href="/comp/casual" className="btn-outline h-[52px] px-8 font-medium">
+        <Link href="/shop/casual" className="btn-outline h-[52px] px-8 font-medium">
           Continue Shopping
         </Link>
       </div>
