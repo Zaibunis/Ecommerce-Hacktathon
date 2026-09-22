@@ -6,8 +6,23 @@ import { neon } from "@neondatabase/serverless";
  */
 export const sql = neon(process.env.DATABASE_URL!);
 
-/** Ensure the schema exists. Cheap; called once per API request. */
-export async function ensureSchema() {
+let schemaReady: Promise<void> | null = null;
+
+/**
+ * Ensure the schema exists — runs ONCE per server process and caches the
+ * promise, so API requests don't pay 4 extra round trips to Neon every time.
+ */
+export function ensureSchema(): Promise<void> {
+  if (!schemaReady) {
+    schemaReady = createSchema().catch((err) => {
+      schemaReady = null; // allow retry on next request
+      throw err;
+    });
+  }
+  return schemaReady;
+}
+
+async function createSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS users (
       clerk_id TEXT PRIMARY KEY,

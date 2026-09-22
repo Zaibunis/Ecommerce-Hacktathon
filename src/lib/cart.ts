@@ -27,6 +27,12 @@ export function saveCart(items: CartItem[]) {
   window.dispatchEvent(new Event(CART_EVENT));
 }
 
+/** Write localStorage WITHOUT broadcasting the cart event (no refetch loops) */
+export function saveCartSilent(items: CartItem[]) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CART_KEY, JSON.stringify(items));
+}
+
 export function addToCart(
   item: { id: string; name: string; price: number; image?: string; size?: string; color?: string },
   quantity = 1
@@ -39,12 +45,20 @@ export function addToCart(
     cart.push({ ...item, quantity });
   }
   saveCart(cart);
-  // Persist to the database (guest cookie or signed-in user)
+  // Persist to the database (guest cookie or signed-in user).
+  // The server response triggers the same cart event via broadcastCartChanged,
+  // so listeners refresh exactly once per mutation.
   fetch("/api/cart", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...item, quantity }),
-  }).catch(() => {});
+  })
+    .then(() => {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event(CART_EVENT));
+      }
+    })
+    .catch(() => {});
   return cart;
 }
 
