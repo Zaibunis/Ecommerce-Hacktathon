@@ -4,7 +4,8 @@ export const dynamic = "force-dynamic";
 
 /**
  * Admin login: validates username + password against env vars server-side.
- * Sets an httpOnly cookie the admin pages/APIs can verify.
+ * On success sets an httpOnly cookie whose VALUE is the admin secret —
+ * the middleware compares it against ADMIN_SECRET_KEY to gate /admin/*.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -21,10 +22,11 @@ export async function POST(request: NextRequest) {
     }
 
     const response = NextResponse.json({ ok: true });
-    response.cookies.set("shopco_admin", "1", {
+    response.cookies.set("shopco_admin", validPass, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
+      path: "/",
       maxAge: 60 * 60 * 8, // 8 hours
     });
     return response;
@@ -35,13 +37,15 @@ export async function POST(request: NextRequest) {
 
 /** Session check: is the visitor an admin? */
 export async function GET(request: NextRequest) {
-  const isAdmin = request.cookies.get("shopco_admin")?.value === "1";
+  const isAdmin =
+    Boolean(process.env.ADMIN_SECRET_KEY) &&
+    request.cookies.get("shopco_admin")?.value === process.env.ADMIN_SECRET_KEY;
   return NextResponse.json({ ok: isAdmin });
 }
 
 /** Logout */
 export async function DELETE() {
   const response = NextResponse.json({ ok: true });
-  response.cookies.set("shopco_admin", "", { maxAge: 0 });
+  response.cookies.set("shopco_admin", "", { path: "/", maxAge: 0 });
   return response;
 }

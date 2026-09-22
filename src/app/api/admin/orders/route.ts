@@ -10,7 +10,10 @@ export const dynamic = "force-dynamic";
  * to the browser like the old hardcoded credentials were).
  */
 function isAuthorized(request: NextRequest): boolean {
-  return request.cookies.get("shopco_admin")?.value === "1";
+  return (
+    Boolean(process.env.ADMIN_SECRET_KEY) &&
+    request.cookies.get("shopco_admin")?.value === process.env.ADMIN_SECRET_KEY
+  );
 }
 
 export async function GET(request: NextRequest) {

@@ -1,7 +1,8 @@
-
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-// Routes that require authentication
+// Storefront routes that require Clerk authentication
 const isProtectedRoute = createRouteMatcher([
   '/shop/mens-clothes(.*)',
   '/shop/casual(.*)',
@@ -11,10 +12,28 @@ const isProtectedRoute = createRouteMatcher([
   '/product(.*)',
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
+export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { userId, redirectToSignIn } = await auth();
 
-  // If user is not authenticated and is trying to access a protected route, redirect them to sign-in
+  // ── Admin gate ────────────────────────────────────────────────
+  // /admin/* is invisible to everyone except the admin.
+  // /admin/login is the only public admin page (it issues the cookie).
+  // The cookie value must equal ADMIN_SECRET_KEY (httpOnly, so browser
+  // JavaScript can't read or forge it).
+  const path = req.nextUrl.pathname;
+  if (path.startsWith('/admin') && !path.startsWith('/admin/login')) {
+    const adminSecret = process.env.ADMIN_SECRET_KEY;
+    const provided = req.cookies.get('shopco_admin')?.value;
+    if (!adminSecret || provided !== adminSecret) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/admin/login';
+      url.search = ''; // strip any query params
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next();
+  }
+
+  // ── Storefront auth gate ──────────────────────────────────────
   if (!userId && isProtectedRoute(req)) {
     return redirectToSignIn({ returnBackUrl: req.url });
   }
@@ -27,4 +46,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-}
+};
