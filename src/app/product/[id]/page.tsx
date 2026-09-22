@@ -54,12 +54,13 @@ export default function ProductPage() {
 
   // Reset selections when the product changes
   useEffect(() => {
-    setSelectedColor(product?.colors?.[0] ?? "");
-    setSelectedSize(product?.sizes?.[0] ?? "");
+    if (!product) return;
+    setSelectedColor(product.colors?.[0] ?? "");
+    setSelectedSize(product.sizes?.[0] ?? "");
     setQuantity(1);
     setActiveImage(0);
     setAdded(false);
-  }, [product?._id]);
+  }, [product]);
 
   if (loading) {
     return (
